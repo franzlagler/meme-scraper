@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cli-progress": "^3.9.0",
     "node-fetch": "^3.0.0"
   },
   "name": "meme-scraper",
