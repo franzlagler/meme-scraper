@@ -31,7 +31,7 @@ async function downloadMemes(urlList) {
 
 // 2. Fetches all the memes and puts them into an array
 
-async function fetchMemes() {
+async function CreateMemeList() {
   const response = await fetch(
     'https://memegen-link-examples-upleveled.netlify.app/',
   );
@@ -48,4 +48,4 @@ async function fetchMemes() {
 
 // 3. Run Function that completes task
 
-fetchMemes();
+CreateMemeList();
