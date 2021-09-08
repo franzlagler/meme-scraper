@@ -3,11 +3,10 @@
 import fs from 'node:fs';
 import fetch from 'node-fetch';
 
-const folderName = './memes';
-
 // 1. Download  memes and put them in the required directory
 
 async function downloadMemes(urlList) {
+  const folderName = './memes';
   // Check if directory exists
   if (!fs.existsSync(folderName)) {
     fs.mkdir(folderName, (err) => {
@@ -16,8 +15,9 @@ async function downloadMemes(urlList) {
       }
     });
   }
-  // Download 10 memes and put them into the direcotry
+  // Download 10 memes and put them in the direcotry
   for (let i = 0; i <= 9; i++) {
+    const folderName = './memes';
     const file = fs.createWriteStream(`${folderName}/memes${i + 1}.jpg`);
     const fetchedImg = await fetch(urlList[i], (err) => {
       if (err) {
@@ -30,7 +30,7 @@ async function downloadMemes(urlList) {
   }
 }
 
-// 2. Fetches all the memes and puts them into an array
+// 2. Fetch all memes and put them in an array
 
 async function createMemeList() {
   const response = await fetch(
@@ -63,6 +63,10 @@ async function createCustomMeme() {
     },
   );
 
+  const folderName = './memes';
+
+  // Check if directory exists
+
   if (!fs.existsSync(folderName)) {
     fs.mkdir(folderName, (err) => {
       if (err) {
@@ -80,7 +84,7 @@ async function createCustomMeme() {
   });
 }
 
-// 4. Check which function to run
+// 4. Check Which Function to Run
 
 // If no additional input
 if (!process.argv[2]) {
