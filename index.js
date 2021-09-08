@@ -1,4 +1,4 @@
-import fs, { createWriteStream } from 'fs';
+import fs from 'node:fs';
 import fetch from 'node-fetch';
 
 async function fetchAndUploadImages() {
