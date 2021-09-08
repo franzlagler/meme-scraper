@@ -17,7 +17,6 @@ async function downloadMemes(urlList) {
   }
   // Download 10 memes and put them in the direcotry
   for (let i = 0; i <= 9; i++) {
-    const folderName = './memes';
     const file = fs.createWriteStream(`${folderName}/memes${i + 1}.jpg`);
     const fetchedImg = await fetch(urlList[i], (err) => {
       if (err) {
