@@ -1,19 +1,20 @@
 // Progress Bar is not finished yet
 
-// 0. Import the require packages
+// 0. Import the required packages
 
-import fs from 'node:fs';
-import cliProgress from 'cli-progress';
-import fetch from 'node-fetch';
+const fs = require('node:fs');
+const cliProgress = require('cli-progress');
+const fetch = require('node-fetch');
 
 // 1. Set Progress Bar
 
-const progressBar = new cliProgress.SingleBar(
-  {},
-  cliProgress.Presets.shades_classic,
+const progessBar = new cliProgress.SingleBar(
+  {
+    fps: 5,
+    clearOnComplete: false,
+  },
+  cliProgress.Presets.legacy,
 );
-
-progressBar.start(200, 0);
 
 // 2. Download  memes and put them in the required directory
 
@@ -34,23 +35,26 @@ async function downloadMemes(urlList) {
       if (err) {
         console.log(err);
       }
-      progressBar.increment(15);
     });
     fetchedImg.body.pipe(file, (err) => {
       console.log(err);
     });
+    progessBar.increment(10);
   }
-  progressBar.increment(30);
-  progressBar.stop();
+  progessBar.increment(25);
+
+  progessBar.stop();
 }
 
 // 3. Fetch all memes and put them in an array
 
 async function createMemeList() {
+  // Start Progress Bar
+  progessBar.start(150, 0);
   const response = await fetch(
     'https://memegen-link-examples-upleveled.netlify.app/',
   );
-  progressBar.increment(20);
+  progessBar.increment(25);
   const body = await response.text();
   // Extract Image Urls from HTML string
   const foundUrls = body.match(/https:\/\/api\.memegen\.link\/images.*\.jpg/g);
@@ -65,6 +69,9 @@ async function createMemeList() {
 // 4. Create Custom Meme
 
 async function createCustomMeme() {
+  // Start Progress Bar
+  progessBar.start(150, 0);
+
   const template = process.argv[2];
   const text1 = process.argv[3];
   const text2 = process.argv[4];
@@ -73,7 +80,7 @@ async function createCustomMeme() {
     `https://api.memegen.link/images/${template}/${text1}/%20${text2}.jpg`,
   ];
 
-  progressBar.increment(20);
+  bar1.increment(20);
 
   downloadMemes(customMemeUrl);
 }
