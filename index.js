@@ -1,19 +1,22 @@
-// Progress Bar is not finished yet
-
 // 0. Import the required packages
 
 const fs = require('node:fs');
 const cliProgress = require('cli-progress');
+const colors = require('colors');
 const fetch = require('node-fetch');
 
-// 1. Set Progress Bar
+// 1. Configure Progress Bar
 
 const progessBar = new cliProgress.SingleBar(
   {
+    format:
+      'Downloading... |' +
+      colors.red('{bar}') +
+      '| {percentage}% || {value}/{total} Memes',
     fps: 5,
     clearOnComplete: false,
   },
-  cliProgress.Presets.legacy,
+  cliProgress.Presets.shades_classic,
 );
 
 // 2. Download  memes and put them in the required directory
@@ -39,9 +42,8 @@ async function downloadMemes(urlList) {
     fetchedImg.body.pipe(file, (err) => {
       console.log(err);
     });
-    progessBar.increment(10);
+    progessBar.increment(1);
   }
-  progessBar.increment(25);
 
   progessBar.stop();
 }
@@ -50,11 +52,10 @@ async function downloadMemes(urlList) {
 
 async function createMemeList() {
   // Start Progress Bar
-  progessBar.start(150, 0);
+  progessBar.start(10, 0);
   const response = await fetch(
     'https://memegen-link-examples-upleveled.netlify.app/',
   );
-  progessBar.increment(25);
   const body = await response.text();
   // Extract Image Urls from HTML string
   const foundUrls = body.match(/https:\/\/api\.memegen\.link\/images.*\.jpg/g);
@@ -68,9 +69,9 @@ async function createMemeList() {
 
 // 4. Create Custom Meme
 
-async function createCustomMeme() {
+function createCustomMeme() {
   // Start Progress Bar
-  progessBar.start(150, 0);
+  progessBar.start(1, 0);
 
   const template = process.argv[2];
   const text1 = process.argv[3];
@@ -80,7 +81,7 @@ async function createCustomMeme() {
     `https://api.memegen.link/images/${template}/${text1}/%20${text2}.jpg`,
   ];
 
-  bar1.increment(20);
+  progessBar.increment(20);
 
   downloadMemes(customMemeUrl);
 }
