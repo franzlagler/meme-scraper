@@ -9,11 +9,8 @@ const fetch = require('node-fetch');
 
 const progessBar = new cliProgress.SingleBar(
   {
-    format:
-      'Downloading... |' +
-      colors.red('{bar}') +
-      '| {percentage}% || {value}/{total} Memes',
-    fps: 5,
+    format: '|' + colors.red('{bar}') + '| {value}/{total} Memes',
+    fps: 3,
     clearOnComplete: false,
   },
   cliProgress.Presets.shades_classic,
@@ -31,14 +28,23 @@ async function downloadMemes(urlList) {
       }
     });
   }
-  // Download memes and put them in the direcotry
-  for (let i = 0; i <= 9; i++) {
-    const file = fs.createWriteStream(`${folderName}/memes${i + 1}.jpg`);
+  // Download meme/memes and put them in the direcotry
+  for (let i = 0; i < (urlList.length === 1 ? 1 : 10); i++) {
+    let file = '';
+
+    // Check if meme list or custom meme depending on array length
+    if (urlList.length === 1) {
+      file = fs.createWriteStream(`${folderName}/custom-meme.jpg`);
+    } else {
+      file = fs.createWriteStream(`${folderName}/memes${i + 1}.jpg`);
+    }
+
     const fetchedImg = await fetch(urlList[i], (err) => {
       if (err) {
         console.log(err);
       }
     });
+
     fetchedImg.body.pipe(file, (err) => {
       console.log(err);
     });
@@ -46,12 +52,18 @@ async function downloadMemes(urlList) {
   }
 
   progessBar.stop();
+  if (urlList.length === 1) {
+    console.log('Successfully downloaded the custom meme!');
+  } else {
+    console.log('Successfully downloaded all required files!');
+  }
 }
 
 // 3. Fetch all memes and put them in an array
 
 async function createMemeList() {
   // Start Progress Bar
+  console.log('Downloading files...');
   progessBar.start(10, 0);
   const response = await fetch(
     'https://memegen-link-examples-upleveled.netlify.app/',
@@ -59,7 +71,7 @@ async function createMemeList() {
   const body = await response.text();
   // Extract Image Urls from HTML string
   const foundUrls = body.match(/https:\/\/api\.memegen\.link\/images.*\.jpg/g);
-  // Filter out Urls that exist twice
+  // Filter  Urls that exist twice
   const filteredFoundUrls = foundUrls.filter((el, index) => {
     return foundUrls.indexOf(el) === index;
   });
@@ -71,17 +83,16 @@ async function createMemeList() {
 
 function createCustomMeme() {
   // Start Progress Bar
+  console.log('Creating and downloading custom meme...');
   progessBar.start(1, 0);
 
   const template = process.argv[2];
   const text1 = process.argv[3];
-  const text2 = process.argv[4];
+  const text2 = process.argv[4] || '';
 
   const customMemeUrl = [
     `https://api.memegen.link/images/${template}/${text1}/%20${text2}.jpg`,
   ];
-
-  progessBar.increment(20);
 
   downloadMemes(customMemeUrl);
 }
