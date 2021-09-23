@@ -1,4 +1,4 @@
-// 0. Import the required packages
+// 0. Import all the required packages
 
 const fs = require('node:fs');
 const cliProgress = require('cli-progress');
