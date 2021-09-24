@@ -86,9 +86,9 @@ function createCustomMeme() {
   console.log('Creating and downloading custom meme...');
   progessBar.start(1, 0);
 
-  const template = process.argv[2];
-  const text1 = process.argv[3];
-  const text2 = process.argv[4];
+  const template = process.argv[4];
+  const text1 = process.argv[2];
+  const text2 = process.argv[3];
 
   const customMemeUrl = [
     `https://api.memegen.link/images/${template}/${text1}/%20${text2}.jpg`,
